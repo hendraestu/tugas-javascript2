@@ -56,8 +56,21 @@ module.exports = {
             });
         });
     },
-    deleteFoods : (req, res)=>{
+    deleteFoods : async (req, res)=>{
         let {id} = req.params;
+
+        let findFoods = await foods.findOne({
+            where: {id}
+        });
+
+        if(findFoods === null){
+            res.status(404).send({
+                msg: "delet error",
+                status: 404,
+                error: "data tidak ditemukan"
+            })
+        }
+
         foods.destroy({
             where : {id}
         })
@@ -65,7 +78,7 @@ module.exports = {
             res.status(200).send({
                 msg: "berhasil menghapus data",
                 status: 200,
-                data,
+                data: findFoods,
             });
         })
         .catch((err)=>{
@@ -76,17 +89,32 @@ module.exports = {
             });
         });
     },
-    updateFoods : (req, res)=>{
+    updateFoods : async (req, res)=>{
         let {id} = req.params;
         let {body} = req;
+
+        let findFoods = await foods.findOne({
+            where: {id}
+        });
+
+        if(findFoods === null){
+            res.status(404).send({
+                msg: "update error",
+                status: 404,
+                error: "data tidak ditemukan"
+            })
+        }
+
         foods.update(body, {
             where : {id}
         })
         .then((data)=>{
+            console.log(findFoods);
+            const resObjeck = {...findFoods.datavalues, ...body};
             res.status(200).send({
                 msg: "berhasil mengupdate data",
                 status: 200,
-                data,
+                data: resObjeck,
             })
         })
         .catch((err)=>{
