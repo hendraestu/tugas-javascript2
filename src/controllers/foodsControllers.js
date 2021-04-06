@@ -59,7 +59,7 @@ module.exports = {
     deleteFoods : async (req, res)=>{
         let {id} = req.params;
 
-        let findFoods = await foods.findOne({
+        const findFoods = await foods.findOne({
             where: {id}
         });
 
@@ -93,7 +93,7 @@ module.exports = {
         let {id} = req.params;
         let {body} = req;
 
-        let findFoods = await foods.findOne({
+        const findFoods = await foods.findOne({
             where: {id}
         });
 
